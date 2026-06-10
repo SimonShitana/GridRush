@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GridRush — The Logic Race</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Embedded styling rule adjustments to support the custom topbar layout links */
+    .topbar-actions {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-home {
+      background: #f5f0e0; 
+      color: #1a4a0d; 
+      border: 2px solid #8b7d3a;
+      padding: 6px 12px; 
+      border-radius: 6px; 
+      font-weight: 700; 
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform .1s, box-shadow .1s;
+      height: 32px; /* Matches standard button tracking height */
+    }
+    .btn-home:hover { 
+      transform: translateY(-1px); 
+      box-shadow: 0 3px 8px rgba(0,0,0,.15); 
+      background: #eef4e8;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <header class="topbar">
+    <img src="logo.png" alt="iClover" class="brand-logo" />
+    <div class="brand-text">
+      <h1>GridRush</h1>
+      <p>The Logic Race — iClover</p>
+    </div>
+    <div class="topbar-actions">
+      <a href="index.html" class="btn-home">🏠 Home</a>
+      <button id="newGameBtn" class="btn">New Game</button>
+    </div>
+  </header>
+
+  <main class="game-area">
+    <section class="center-col">
+      <div class="board-wrap">
+        <div id="board" class="board">
+          <object id="boardSvg" type="image/svg+xml" data="board.svg"></object>
+          <div id="tokens" class="tokens"></div>
+          
+          <div class="grid-panel">
+            <div id="sudokuGrid" class="sudoku"></div>
+          </div>
+          
+          <div id="cluesLayer" class="hidden-layer"></div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="sidebar">
+      <div class="panel" id="playersPanel">
+        <h2>Players</h2>
+        <ul id="playerList"></ul>
+      </div>
+
+      <div class="panel" id="turnPanel">
+        <h2>Turn Control</h2>
+        <p id="turnInfo">Press <b>New Game</b> to start.</p>
+        <div class="dice-area">
+          <div id="dice" class="dice">?</div>
+          <button id="rollBtn" class="btn primary" disabled>Roll Dice</button>
+        </div>
+        <div class="timer-area">
+          <div class="timer-bar"><div id="timerFill"></div></div>
+          <div id="timerText">15.0s</div>
+        </div>
+        <div id="messageBox" class="message"></div>
+      </div>
+
+      <div class="panel">
+        <h2>Legend</h2>
+        <ul class="legend">
+          <li><span class="lg green">»</span> Move Ahead 2 Spaces</li>
+          <li><span class="lg red">✕</span> Lose Next Turn</li>
+          <li><span class="lg gold">★</span> START (roll 6 to enter)</li>
+          <li><span class="lg trophy">🏆</span> FINISH (Ranked Finish)</li>
+        </ul>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="footer">Race the Grid. Master the Mind.</footer>
+</div>
+
+<div id="setupModal" class="modal hidden">
+  <div class="modal-content">
+    <h2>New Game Settings</h2>
+    <label style="display: block; margin-bottom: 15px; font-weight: bold;">Number of Competitors:
+      <select id="numPlayers" style="margin-left: 10px; padding: 4px 8px;">
+        <option value="2">2 Players</option>
+        <option value="3">3 Players</option>
+        <option value="4" selected>4 Players</option>
+      </select>
+    </label>
+    
+    <div id="playerNames" style="margin-bottom: 20px; max-height: 240px; overflow-y: auto;"></div>
+    
+    <button id="startGameBtn" class="btn primary" style="width: 100%;">Start Tournament</button>
+  </div>
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>

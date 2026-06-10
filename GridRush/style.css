@@ -1,0 +1,171 @@
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif; background: #eef5e8; color: #1a3a14; overflow-y: auto; }
+
+/* Smooth Scroll Anchor Optimization */
+html {
+  scroll-behavior: smooth;
+}
+
+.topbar {
+  display: flex; align-items: center; gap: 14px;
+  padding: 8px 16px; background: linear-gradient(90deg,#1a6b2f,#2d7a1f);
+  color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,.15);
+}
+.brand-logo { height: 40px; width: auto; background: #fff; border-radius: 6px; padding: 4px; }
+.brand-text h1 { margin: 0; font-size: 18px; letter-spacing: 1px; }
+.brand-text p { margin: 0; font-size: 11px; opacity: .85; }
+.topbar .btn { margin-left: auto; padding: 6px 12px; font-size: 13px; }
+
+.btn {
+  background: #f5f0e0; color: #1a4a0d; border: 2px solid #8b7d3a;
+  padding: 6px 12px; border-radius: 6px; font-weight: 700; cursor: pointer;
+  transition: transform .1s, box-shadow .1s; font-size: 13px;
+}
+.btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 3px 8px rgba(0,0,0,.15); }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.btn.primary { background: #c8960a; color: #fff; border-color: #8b6800; }
+
+/* Main layout tracking alignment */
+.game-area {
+  display: grid; grid-template-columns: minmax(0,1.6fr) 280px;
+  gap: 12px; padding: 12px; align-items: start;
+}
+@media (max-width: 1100px) { .game-area { grid-template-columns: 1fr; } }
+
+.center-col { display: flex; flex-direction: column; gap: 12px; align-items: center; }
+
+/* Board Container Constraints */
+.board-wrap { 
+  background: #fff; 
+  border-radius: 10px; 
+  padding: 8px; 
+  box-shadow: 0 4px 166px rgba(0,0,0,.1); 
+  width: 100%;
+  max-width: 640px;
+}
+.board { position: relative; width: 100%; aspect-ratio: 1190/841; }
+#boardSvg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.tokens { position: absolute; inset: 0; pointer-events: none; }
+
+/* Positions the Sudoku container inside the open center space of your track image */
+.grid-panel { 
+  position: absolute;
+  top: 26.5%;
+  left: 27%;
+  width: 46%;
+  height: 48%;
+  z-index: 5;
+}
+
+.token {
+  position: absolute; width: 3.4%; aspect-ratio: 1; transform: translate(-50%,-50%);
+  transition: left .35s ease, top .35s ease;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,.4));
+  z-index: 10;
+}
+.token svg { width: 100%; height: 100%; }
+.token.active { animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100%{ transform: translate(-50%,-50%) scale(1);} 50%{ transform: translate(-50%,-50%) scale(1.18);} }
+
+/* Sidebar Panels */
+.sidebar { display: flex; flex-direction: column; gap: 10px; }
+.panel { background: #fff; border-radius: 8px; padding: 10px; box-shadow: 0 4px 12px rgba(0,0,0,.08); }
+.panel h2 { margin: 0 0 6px 0; font-size: 13px; color: #1a4a0d; border-bottom: 2px solid #8b7d3a; padding-bottom: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+#playerList { list-style: none; padding: 0; margin: 0; }
+#playerList li {
+  display: flex; align-items: center; gap: 6px; padding: 4px 6px;
+  border-radius: 4px; margin-bottom: 2px; font-size: 12px;
+}
+#playerList li.current { background: #fff7d6; font-weight: 700; }
+.swatch { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid #333; }
+
+#turnInfo { margin: 0 0 6px 0; font-size: 12px; }
+.dice-area { display: flex; align-items: center; gap: 10px; margin: 6px 0; perspective: 400px; }
+
+/* Dynamic 3D Dice styling */
+.dice {
+  width: 50px; height: 50px; background: #fff; border: 2.5px solid #1a4a0d;
+  border-radius: 8px; display: flex; align-items: center; justify-content: center;
+  font-size: 26px; font-weight: 900; color: #1a4a0d; box-shadow: 0 4px 8px rgba(0,0,0,0.15), inset 0 -2px 0 rgba(0,0,0,.1);
+  transition: transform 0.15s ease-out;
+  transform-style: preserve-3d;
+}
+
+/* 3D Real Spin Animation when rolling class triggers */
+.dice.rolling { 
+  animation: realSpin 0.12s infinite linear; 
+}
+
+@keyframes realSpin {
+  0% { transform: scale(1.1) rotateX(0deg) rotateY(0deg) rotateZ(0deg); filter: blur(0.5px); }
+  25% { transform: scale(1.15) rotateX(90deg) rotateY(45deg) rotateZ(20deg); }
+  50% { transform: scale(1.1) rotateX(180deg) rotateY(90deg) rotateZ(40deg); filter: blur(1px); }
+  75% { transform: scale(1.15) rotateX(270deg) rotateY(45deg) rotateZ(20deg); }
+  100% { transform: scale(1.1) rotateX(360deg) rotateY(0deg) rotateZ(0deg); filter: blur(0.5px); }
+}
+
+.timer-area { margin-top: 6px; }
+.timer-bar { background: #eee; height: 8px; border-radius: 4px; overflow: hidden; }
+#timerFill { height: 100%; width: 100%; background: linear-gradient(90deg,#2d7a1f,#c8960a,#b01010); transition: width .1s linear; }
+#timerText { font-size: 11px; margin-top: 2px; text-align: right; }
+
+.message { min-height: 28px; margin-top: 6px; padding: 6px; border-radius: 4px; background: #f5f0e0; font-size: 11px; line-height: 1.3; }
+.message.good { background: #d4edcb; color: #1a4a0d; }
+.message.bad { background: #f7d2d2; color: #6e0a0a; }
+
+/* Refined Sudoku Board Grid Box */
+.sudoku {
+  display: grid; grid-template-columns: repeat(6, 1fr); gap: 2px;
+  background: #1a4a0d; padding: 4px; border-radius: 6px;
+  width: 100%; height: 100%;
+}
+.sudoku .cell {
+  background: #fff; display: flex; align-items: center; justify-content: center;
+  font-family: "Arial Black", sans-serif; font-weight: 900; 
+  font-size: 1.35rem; cursor: pointer; user-select: none;
+}
+.sudoku .cell.clue { color: #555; background: #f0f0f0; cursor: not-allowed; }
+.sudoku .cell.placed { color: #1a6b2f; background: #e2f3df; cursor: not-allowed; }
+.sudoku .cell.placeable:hover { background: #d4edcb; }
+.sudoku .cell.invalid { background: #f7d2d2 !important; animation: flash .4s; }
+@keyframes flash { 0%,100%{background:#f7d2d2;} 50%{background:#fff;} }
+
+/* 2x3 box borders */
+.sudoku .cell[data-c="2"], .sudoku .cell[data-c="4"] { border-right: 3px solid #1a4a0d; }
+.sudoku .cell[data-r="1"], .sudoku .cell[data-r="3"] { border-bottom: 3px solid #1a4a0d; }
+
+/* Compacted Legend Section */
+.legend { list-style: none; padding: 0; margin: 0; font-size: 11px; }
+.legend li { display: flex; align-items: center; gap: 6px; padding: 2px 0; }
+.lg { display: inline-block; width: 16px; height: 16px; border-radius: 3px; color: #fff; font-weight: 900; text-align: center; line-height: 16px; font-size: 10px; }
+.lg.green { background: #1e5c14; }
+.lg.red { background: #b01010; }
+.lg.gold { background: #c8960a; }
+.lg.trophy { background: #fff; color: #1a4a0d; border: 1px solid #1a4a0d; }
+
+.footer { text-align: center; padding: 8px; color: #1a4a0d; font-size: 11px; font-style: italic; }
+
+/* Modal Setup Interface Fixes for AI Dropdowns */
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,.5); display: flex; align-items: center; justify-content: center; z-index: 100; }
+.modal.hidden { display: none; }
+.modal-content { background: #fff; padding: 20px; border-radius: 10px; min-width: 320px; max-width: 90%; }
+.modal-content h2 { margin-top: 0; color: #1a4a0d; font-size: 16px; margin-bottom: 12px; }
+.modal-content label { display: block; margin: 8px 0; font-weight: 600; font-size: 13px; }
+.modal-content select, .modal-content input { width: 100%; padding: 6px; border-radius: 4px; border: 1px solid #c0c0c0; margin-top: 4px; font-size: 13px; background: #fff; }
+
+.player-row { 
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+  margin: 10px 0; 
+  background: #fdfcf7;
+  padding: 6px;
+  border-radius: 6px;
+  border: 1px dashed #8b7d3a;
+}
+.player-row .swatch { flex-shrink: 0; }
+.player-row input { flex: 2; min-width: 0; }
+.player-row select { flex: 1.5; min-width: 0; }
+
+.hidden-layer { display: none; visibility: hidden; }
